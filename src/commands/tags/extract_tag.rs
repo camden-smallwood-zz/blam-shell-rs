@@ -1,6 +1,6 @@
 use blam::cache::CacheContext;
 use crate::commands::Command;
-use std::{cell::RefCell, fs::File, isize, io::{self, Error, ErrorKind, Read, Seek, SeekFrom, Write}, rc::Rc};
+use std::{cell::RefCell, fs::File, isize, io::{self, Error, ErrorKind}, rc::Rc};
 
 pub struct ExtractTagCommand {
     pub cache_context: Rc<RefCell<CacheContext>>
@@ -32,16 +32,8 @@ impl Command for ExtractTagCommand {
                     if tag_index < 0 || tag_index >= self.cache_context.borrow().tag_cache.get_tag_count() {
                         Err(Error::new(ErrorKind::InvalidInput, format!("Invalid tag index supplied: {}", args[0]).to_string()))
                     } else {
-                        let mut file = File::create(args[1].as_str())?;
-                        
                         let tag_cache = &mut self.cache_context.borrow_mut().tag_cache;
-                        let tag = &tag_cache[tag_index as usize];
-                        
-                        let mut data = vec![0u8; tag.header.unwrap().size as usize];
-                        tag_cache.file.seek(SeekFrom::Start(tag.offset.unwrap()))?;
-                        tag_cache.file.read_exact(data.as_mut_slice())?;
-                        
-                        file.write_all(data.as_slice())
+                        tag_cache.extract_tag_data(tag_index as usize, &mut File::create(args[1].as_str())?)
                     }
                 }
             }

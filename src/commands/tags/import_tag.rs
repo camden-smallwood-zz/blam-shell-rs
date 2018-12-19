@@ -1,6 +1,6 @@
 use blam::cache::CacheContext;
 use crate::commands::Command;
-use std::{cell::RefCell, fs::File, isize, io::{self, Error, ErrorKind, Read, Seek, SeekFrom, Write}, rc::Rc};
+use std::{cell::RefCell, fs::File, isize, io::{self, Error, ErrorKind}, rc::Rc};
 
 pub struct ImportTagCommand {
     pub cache_context: Rc<RefCell<CacheContext>>
