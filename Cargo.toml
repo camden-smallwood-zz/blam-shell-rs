@@ -1,0 +1,8 @@
+[package]
+name = "blam_shell"
+version = "0.1.0"
+authors = ["Camden Smallwood <camden.smallwood@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+blam = { git = "https://github.com/camden-smallwood/blam-rs.git" }
